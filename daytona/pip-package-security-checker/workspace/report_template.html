@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$page_title</title>
+  <style>
+    :root {
+      --paper: #f7f1e8;
+      --paper-strong: #efe5d4;
+      --ink: #231c15;
+      --muted: #6d655d;
+      --rule: #d6cab7;
+      --allow: #1c6b4a;
+      --warn: #9a5f10;
+      --block: #8f172a;
+      --low: #3a6d5a;
+      --medium: #a36a1f;
+      --high: #9a4324;
+      --critical: #7f1626;
+      --shadow: 0 20px 45px rgba(43, 32, 17, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(166, 105, 42, 0.16), transparent 32%),
+        radial-gradient(circle at top right, rgba(127, 22, 38, 0.12), transparent 28%),
+        linear-gradient(180deg, #efe6d6 0%, #e4d7c2 100%);
+      font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    code {
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+      font-size: 0.92em;
+      background: rgba(35, 28, 21, 0.06);
+      padding: 0.1rem 0.3rem;
+      border-radius: 0.3rem;
+    }
+    .page {
+      width: min(1160px, calc(100vw - 2rem));
+      margin: 1.4rem auto 2.4rem;
+      padding: 1.6rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(247,241,232,0.98));
+      border: 1px solid rgba(125, 104, 70, 0.18);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+    .masthead {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: start;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .eyebrow {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+    .title {
+      margin: 0.2rem 0 0.45rem;
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      line-height: 1.02;
+      font-weight: 600;
+    }
+    .subtitle {
+      margin: 0;
+      max-width: 54rem;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+    .stamp {
+      text-align: right;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.72rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .decision-allow { color: var(--allow); background: rgba(28, 107, 74, 0.12); border-color: rgba(28, 107, 74, 0.2); }
+    .decision-warn { color: var(--warn); background: rgba(154, 95, 16, 0.12); border-color: rgba(154, 95, 16, 0.2); }
+    .decision-block { color: var(--block); background: rgba(143, 23, 42, 0.12); border-color: rgba(143, 23, 42, 0.2); }
+    .risk-low { color: var(--low); }
+    .risk-medium { color: var(--medium); }
+    .risk-high { color: var(--high); }
+    .risk-critical { color: var(--critical); }
+    .lede {
+      margin-top: 1.3rem;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+    }
+    .panel {
+      padding: 1.15rem 1.15rem 1rem;
+      border-radius: 22px;
+      border: 1px solid rgba(125, 104, 70, 0.14);
+      background: rgba(255, 252, 248, 0.72);
+    }
+    .panel h2, .panel h3 {
+      margin: 0 0 0.7rem;
+      font-size: 1.1rem;
+      line-height: 1.15;
+    }
+    .panel p { margin: 0; }
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .metric-card {
+      padding: 0.8rem 0.85rem;
+      border-radius: 18px;
+      background: var(--paper);
+      border: 1px solid rgba(125, 104, 70, 0.12);
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      line-height: 1;
+      font-weight: 700;
+    }
+    .metric-label {
+      margin-top: 0.35rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .chart, .meter {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .chart-label, .meter-label {
+      fill: #5a5045;
+      font-size: 12px;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+    }
+    .chart-value, .meter-value, .meter-caption {
+      fill: #231c15;
+      font-size: 12px;
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+    }
+    .section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule);
+    }
+    .section-title {
+      margin: 0 0 0.7rem;
+      font-size: 1.35rem;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .small {
+      font-size: 0.8rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 0.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(125, 104, 70, 0.12);
+      background: rgba(255,255,255,0.72);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.8rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid rgba(125, 104, 70, 0.12);
+    }
+    th {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: rgba(239, 229, 212, 0.8);
+    }
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    ul {
+      margin: 0;
+      padding-left: 1.15rem;
+    }
+    li + li {
+      margin-top: 0.42rem;
+    }
+    .footer-note {
+      margin-top: 1.25rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    @media (max-width: 960px) {
+      .masthead,
+      .lede,
+      .columns,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+      .stamp {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Pip Guard Security Dossier</p>
+        <h1 class="title">$package_name</h1>
+        <p class="subtitle">Codex analyzed this package inside the dedicated Daytona sandbox using staged release artifacts, resolved dependency advisories, static code checks, heuristic review, and evidence-grounded judgment.</p>
+        <div class="badge-row">
+          <span class="badge decision-$decision_class">Decision $decision_label</span>
+          <span class="badge decision-$decision_class">Risk $risk_label</span>
+          <span class="badge decision-$decision_class">Confidence $confidence_label</span>
+          <span class="badge decision-$decision_class">Malicious $malicious_label</span>
+          <span class="badge decision-$decision_class">Known Vulns $known_vulnerabilities_label</span>
+        </div>
+      </div>
+      <div class="stamp">
+        <div><strong>Job</strong> <code>$job_id</code></div>
+        <div><strong>Generated</strong> $generated_at</div>
+      </div>
+    </header>
+
+    <section class="lede">
+      <article class="panel">
+        <h2>Executive Summary</h2>
+        <p>$executive_summary</p>
+        <div class="section">
+          <h3>Recommended Action</h3>
+          <p>$recommended_action</p>
+          <p class="footer-note"><strong>Recommended version:</strong> <code>$recommended_version</code></p>
+        </div>
+      </article>
+      <article class="panel">
+        $risk_meter_svg
+        <div class="section">
+          $signal_chart_svg
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Evidence Snapshot</h2>
+      <div class="metrics">$metrics_cards</div>
+      <div class="table-wrap">
+        <table>
+          <tbody>$summary_rows</tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="columns">
+      <article class="panel">
+        <h2>Suspicious Behavior</h2>
+        $suspicious_behavior
+      </article>
+      <article class="panel">
+        <h2>Key Evidence</h2>
+        $key_evidence
+        <div class="section">
+          <h3>Notes</h3>
+          $notes
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">Advisories By Package</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dependency</th>
+              <th>Advisory</th>
+              <th>Fixed In</th>
+              <th>Source</th>
+              <th>Expanded Detail</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>$vulnerability_rows</tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">Artifact Index</h2>
+      <div class="table-wrap">
+        <table>
+          <tbody>$artifact_rows</tbody>
+        </table>
+      </div>
+      <p class="footer-note">This report is intentionally HTML-first for low-latency delivery from Daytona. The visual style follows a TeX-like dossier layout without requiring a LaTeX or Quarto runtime inside the sandbox.</p>
+    </section>
+  </main>
+</body>
+</html>

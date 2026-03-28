@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "risk_level",
+    "confidence",
+    "malicious",
+    "known_vulnerabilities",
+    "executive_summary",
+    "recommended_action",
+    "recommended_version",
+    "suspicious_behavior",
+    "key_evidence",
+    "notes"
+  ],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": ["allow", "warn", "block"]
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "malicious": {
+      "type": "boolean"
+    },
+    "known_vulnerabilities": {
+      "type": "boolean"
+    },
+    "executive_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recommended_action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recommended_version": {
+      "type": ["string", "null"]
+    },
+    "suspicious_behavior": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "key_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
